@@ -29,6 +29,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import coil.compose.rememberImagePainter
 import kim.bifrost.coldrain.composechatroom.model.bean.ChatMessageBean
 import kim.bifrost.coldrain.composechatroom.ui.theme.ComposeChatRoomTheme
@@ -60,7 +61,10 @@ fun Main() {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "start") {
         composable("start") { Start(navController) }
-        composable("chat/{userId}/{avatar}") { Chat(navController, it.arguments!!.getString("userId")!!.run { if (this == "null") null else this }, it.arguments!!.getString("avatar")!!.run { if (this == "null") null else this }) }
+        composable(
+            "chat/{userId}?avatar={avatar}",
+            arguments = listOf(navArgument("avatar") { defaultValue = "null" })
+        ) { Chat(navController, it.arguments!!.getString("userId")!!.run { if (this == "null") null else this }, it.arguments!!.getString("avatar")!!.run { if (this == "null") null else this }) }
     }
 }
 
@@ -106,7 +110,7 @@ fun Start(navController: NavController) {
         )
         Button(
             onClick = {
-                navController.navigate("chat/${if(userId.isEmpty()) "null" else userId}/${if(avatar.isEmpty()) "null" else avatar}")
+                navController.navigate("chat/${if(userId.isEmpty()) "null" else userId}${if(avatar.isEmpty()) "" else "?avatar=$avatar"}")
             },
             modifier = Modifier
                 .fillMaxWidth()
