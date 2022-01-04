@@ -4,6 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.google.gson.annotations.Expose
+import java.util.*
 
 /**
  * kim.bifrost.coldrain.composechatroom.model.bean.ChatMessageBean
@@ -28,5 +29,12 @@ data class ChatMessageBean(
     val data: String?,
     @Expose
     @ColumnInfo(name = "avatar", typeAffinity = ColumnInfo.TEXT)
-    val avatar: String
-)
+    val avatar: String,
+    @Expose
+    @ColumnInfo(name = "date", typeAffinity = ColumnInfo.INTEGER)
+    val date: Long
+) {
+    fun time(): String {
+        return Date(date).toLocaleString()
+    }
+}

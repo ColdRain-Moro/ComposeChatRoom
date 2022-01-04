@@ -14,6 +14,7 @@ import org.java_websocket.handshake.ServerHandshake
 import java.lang.Exception
 import java.lang.StringBuilder
 import java.net.URI
+import java.net.URLEncoder
 
 /**
  * kim.bifrost.coldrain.composechatroom.ChatViewModel
@@ -69,7 +70,7 @@ class ChatViewModel(context: Context) : ViewModel() {
         if (name == null && avatar == null) return ""
         val builder = StringBuilder("?")
         name?.let {
-            builder.append("username=$it")
+            builder.append("username=${URLEncoder.encode(it, "utf-8")}")
             avatar?.let {
                 builder.append("&")
             }

@@ -88,7 +88,7 @@ fun Start(navController: NavController) {
             value = userId,
             onValueChange = { value ->
                 val realValue = value.trimStart().trimEnd()
-                if (realValue.length <= 12 && realValue.all { it.isLowerCase() || it.isUpperCase() }) {
+                if (realValue.length <= 12) {
                     userId = realValue
                 }
             },
@@ -171,11 +171,12 @@ fun Chat(navController: NavController, userId: String?, avatar: String?) {
         Column(
             modifier = Modifier
                 .background(Color(0xB2E0E0E0))
-                .fillMaxSize()
+                .wrapContentHeight()
         ) {
             CommonOutlinedTextField(
                 modifier = Modifier
-                    .fillMaxHeight(0.6f)
+                    .padding(horizontal = 5.dp)
+                    .wrapContentHeight()
                     .fillMaxWidth()
                     .background(Color.White),
                 value = inputMsg,
@@ -186,12 +187,15 @@ fun Chat(navController: NavController, userId: String?, avatar: String?) {
             )
             Button(
                 onClick = {
-                    viewModel.send(inputMsg)
-                    inputMsg = ""
+                    if (inputMsg.isNotEmpty()) {
+                        viewModel.send(inputMsg)
+                        inputMsg = ""
+                    }
                 },
                 modifier = Modifier
-                    .padding(3.dp)
-                    .fillMaxSize()
+                    .padding(5.dp)
+                    .fillMaxWidth()
+                    .height(60.dp)
                     .align(Alignment.CenterHorizontally),
             ) {
                 Text(
@@ -248,7 +252,8 @@ fun ChatItem(
         type = "OPEN",
         username = "Rain",
         avatar = "https://gitee.com/coldrain-moro/images_bed/raw/master/images/chino.jpg",
-        data = "我们仍需与生命中的慷慨与繁华相爱，即便岁月以荒芜与刻薄相欺。"
+        data = "我们仍需与生命中的慷慨与繁华相爱，即便岁月以荒芜与刻薄相欺。",
+        date = System.currentTimeMillis()
     ),
 ) {
     when (bean.type) {
@@ -309,7 +314,7 @@ private fun MessageChatItem(
                         )
                     )
                     Text(
-                        text = Date().toLocaleString(),
+                        text = bean.time(),
                         style = TextStyle(
                             fontSize = 11.sp,
                         ),
